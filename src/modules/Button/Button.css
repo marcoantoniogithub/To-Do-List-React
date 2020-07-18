@@ -1,0 +1,11 @@
+.teste {
+    padding: 6px 10px;
+    border-radius: 5px;
+    box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.4);
+    border-style: none;
+    margin:3px;
+}
+
+.teste :active {
+    box-shadow: none;
+}

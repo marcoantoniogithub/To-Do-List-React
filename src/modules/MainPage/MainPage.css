@@ -1,0 +1,23 @@
+.div-button {
+    display: flex;
+    justify-content: space-around;
+}
+
+.container-repo {
+    margin: 5px;
+    border: solid 1px black;
+    padding: 10px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.div-repos { 
+    display: flex; 
+    flex-wrap: wrap;
+}
+
+.name-repo {
+    margin:6px;
+}
