@@ -1,0 +1,10 @@
+.container-body {
+    margin:6px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.container-body div {
+    margin:5px;
+}

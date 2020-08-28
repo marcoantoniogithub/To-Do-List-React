@@ -1,54 +1,54 @@
 import React, { useState, useEffect } from 'react';
 import './MainPage.css';
-import Button from '../Button/index';
+import Card from '../Card/index';
+import CardBody from '../CardBody';
+import CardTitle from '../CardTitle';
 
 export default function MainPage() {
 
   const [repositories, setRepositories] = useState([]);
+  const [repositoriesFiltered, setRepositoriesFiltered] = useState([]);
+  const [inputValue, setInputValue] = useState("");
 
-  // mock add repo
-  function newRepositorie() {
-    setRepositories([...repositories, {id: Math.round(Math.random()), name: "New Repo"}])
-  }
-
-  function clearRepos() {
-    setRepositories([]);
-  }
-
-  function teste(id) {
-    setRepositories([
-      repositories.filter( element => {
-        return element.id !== id;
+  function inputDate(event) {
+    const valueInput = event.target.value.trim().toLocaleLowerCase();
+    let retorno = repositoriesFiltered.filter(
+      element => {
+        return element.name.trim().toLocaleLowerCase().indexOf(valueInput) != -1;
       }
-    )]);  
+    );
+    if(valueInput.length > 0) {
+      setRepositoriesFiltered(retorno);
+    } else {
+      setRepositoriesFiltered(repositories);
+    }
+    
+    setInputValue(event.target.value);
   }
-
-  // useEffect(()=> {
-  //   console.log('new Repositorie');
-  // }, [repositories]);
 
   useEffect( async () => {
-    const respose = await fetch('https://api.github.com/users/marcoantoniogithub/repos');
+    const respose = await fetch('https://api.github.com/search/repositories?q=language:Javascript&sort=stars&page=1');
     const data = await respose.json();
-    setRepositories(data);
+    setRepositories(data.items);
+    setRepositoriesFiltered(data.items);
+    console.log(data);
   }, []);
 
   return (
     <>
-      <div class="div-repos">
-        {repositories.map(element => (
-          <div class="container-repo">
-            <span>{element.id}</span>
-            <span class="name-repo">{element.name}</span> 
-            <span onClick={(e) => teste(element.id)}>
-              <img src="https://image.flaticon.com/icons/svg/864/864390.svg" alt="delete" width="20px"/>
-            </span>
-          </div>
-        ))}
+      <nav>
+        <h1>Repositories</h1>
+      </nav>
+      <div class="div-search">
+        <input placeholder='Search for repositories' onChange={inputDate} value={inputValue}/>
       </div>
-      <div class="div-button">
-        <Button style={'primary'} onClick={newRepositorie}>Add Repo</Button>
-        <Button style={'secundary'} onClick={clearRepos}>Clear All Repos</Button>
+      <div class="div-repos">
+        {repositoriesFiltered.map(element => (
+          <Card>
+            <CardTitle img={element.owner.avatar_url} title={element.name}></CardTitle>
+            <CardBody starCount={element.stargazers_count} forkCount={element.forks}></CardBody>
+          </Card>
+        ))}
       </div>
     </>
   );
